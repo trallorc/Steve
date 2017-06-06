@@ -18,7 +18,7 @@ public class Type1 extends BasicObject {
 		super(img, x,y);
         health= (int)(Math.random() * 5 + 3);
         damage= (int)(Math.random() * 5 + 3);
-        speed= (int)(Math.random() * 5 + 3);
+        speed= 3;
 		init();
 	}
 
@@ -63,7 +63,12 @@ public class Type1 extends BasicObject {
 
 	}
 
-    @Override
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	@Override
     public String toString() {
         return "Sprite{" +
                 "health=" + health +

@@ -63,7 +63,12 @@ public class Type2 extends BasicObject {
 
 	}
 
-    @Override
+
+	public int getSpeed() {
+		return speed;
+	}
+
+	@Override
     public String toString() {
         return "Sprite{" +
                 "health=" + health +

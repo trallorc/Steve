@@ -63,6 +63,11 @@ public class Type3 extends BasicObject {
 
     }
 
+
+    public int getSpeed() {
+        return speed;
+    }
+
     @Override
     public String toString() {
         return "Sprite{" +

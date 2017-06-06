@@ -34,6 +34,7 @@ public class map {
     int[][] board = new int[BSIZE][BSIZE];
     BasicObject[][] boardSprite = new BasicObject[BSIZE][BSIZE];
     Units kek = new Units();
+    Units greens = new Units();
     BasicObject tempe;
     int click = 1;
 
@@ -50,7 +51,7 @@ public class map {
             }
         }
 
-        //set up board here
+
         for (int i = 0; i < 14; i += 2) {
             Point k = new Point(hexmech.pxtoHex2(i, 0));
             Type1 chok = new Type1("picts/bad1.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
@@ -59,6 +60,7 @@ public class map {
             boardSprite[i][0] = kek.objects[temp];
 
         }
+
 
         for (int i = 1; i < 14; i += 2) {
             Point k = new Point(hexmech.pxtoHex2(i, 13));
@@ -93,12 +95,9 @@ public class map {
 
     class DrawingPanel extends JPanel {
         //mouse variables here
-        //Point mPt = new Point(0,0);
-        //Sprite currentSprite;
 
         public DrawingPanel() {
             setBackground(COLOURBACK);
-            //currentSprite = new Sprite("picts/bad1.png", 4000,4000);
             MyMouseListener ml = new MyMouseListener();
             addMouseListener(ml);
         }
@@ -128,6 +127,7 @@ public class map {
             //g.drawLine(mPt.x,mPt.y, mPt.x,mPt.y);
             //currentSprite.draw(g);
             kek.draw(g);
+            greens.draw(g);
         }
 
         class MyMouseListener extends MouseAdapter {
@@ -182,11 +182,12 @@ public class map {
                     repaint();
                 }
                 if (e.getButton() == 3) {
-                    offsetDistance(a, p);
+                    System.out.println(offsetDistance(a, p));
+                    showRange(p);
 
                 }
-            } //end of MyMouseListener class
-        } // end of DrawingPanel class
+            }
+        }
 
         public int[] offsetToCube(int row, int col){
             int z,x,y;
@@ -204,13 +205,36 @@ public class map {
 
         }
 
-        public void offsetDistance(Point one, Point two) {
+        public int offsetDistance(Point one, Point two) {
             int[] ac = offsetToCube(one.x,one.y);
             int[] bc = offsetToCube(two.x, two.y);
-            System.out.println(cubeDistance(ac, bc));
+            return (cubeDistance(ac, bc));
         }
 
-// lulbkb
+        public void showRange (Point one){
+            int distance, speed;
+            Point check;
+            tempe=boardSprite[one.x][one.y];
+            int temp = kek.searchIndex(tempe);
+            tempe.setSpeed(kek.objects[temp].getSpeed());
+            speed=tempe.speed;
+            for (int i = 0; i < BSIZE; i++) {
+                for (int j = 0; j < BSIZE; j++) {
+                  check = new Point(hexmech.pxtoHex(i,j));
+                  distance= offsetDistance(check ,one);
+                    System.out.println(one+","+check+","+distance);
+                  /*  if(distance <= speed) {
+                      System.out.println(i+","+j);
+                    //Green place= new Green("picts/Green.png", one.x, one.y);
+                    //greens.add(place);*//*
+
+                  }*/
+                }
+            }
+
+        }
+
+
 
 
 

@@ -223,6 +223,7 @@ http://www.tonypa.pri.ee/tbw/tut25.html
         return p;
     }
 
+    /*** Point to hex by hex coordinates***/
     public static Point pxtoHex2(int i, int j) {
 
         Point p = new Point(-1, -1);
