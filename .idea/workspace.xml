@@ -2,9 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="f3b6a9a4-b3c4-4cd6-8fe6-3534892ef875" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/Steve1.iml" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/map.java" afterPath="$PROJECT_DIR$/src/map.java" />
     </list>
@@ -22,8 +19,8 @@
       <file leaf-file-name="map.java" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/map.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="311">
-              <caret line="231" column="17" lean-forward="true" selection-start-line="231" selection-start-column="17" selection-end-line="231" selection-end-column="17" />
+            <state relative-caret-position="413">
+              <caret line="237" column="0" lean-forward="true" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -508,7 +505,14 @@
       <option name="project" value="LOCAL" />
       <updated>1496775959249</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="New">
+      <created>1496776611179</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1496776611179</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TodoView" selected-index="4">
@@ -925,8 +929,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/map.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="311">
-          <caret line="231" column="17" lean-forward="true" selection-start-line="231" selection-start-column="17" selection-end-line="231" selection-end-column="17" />
+        <state relative-caret-position="413">
+          <caret line="237" column="0" lean-forward="true" selection-start-line="237" selection-start-column="0" selection-end-line="237" selection-end-column="0" />
           <folding />
         </state>
       </provider>
