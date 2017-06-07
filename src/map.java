@@ -138,6 +138,7 @@ public class map {
 
         class MyMouseListener extends MouseAdapter {
             public void mouseClicked(MouseEvent e) {
+
                 Point p = new Point(hexmech.pxtoHex(e.getX(), e.getY()));
                  //System.out.println("p: " + p.x + " " +  p.y);
                 Point k = new Point(hexmech.pxtoHex2(p.x, p.y));
@@ -145,22 +146,19 @@ public class map {
 
                 if (p.x < 0 || p.y < 0 || p.x >= BSIZE || p.y >= BSIZE) return;
 
-                //DEBUG: colour in the hex which is supposedly the one clicked on
-                //clear the whole screen first.
-                /* for (int i=0;i<BSIZE;i++) {
-                    for (int j=0;j<BSIZE;j++) {
-						board[i][j]=EMPTY;
-					}
-				} */
+                System.out.println("First:"+p+"Last:"+last);
+
                 if (e.getButton() == 1) {
                     System.out.println(unitSelected);
                     if(attackTurn) {
                         check=false;
                         if(board[p.x][p.y]==1) {
                             if(boardSprite[p.x][p.y] != null) {
-                                attack(last, p);
-                                clearBoard();
-                                attackTurn=false;
+
+                                    attack(last, p);
+                                    clearBoard();
+                                    attackTurn = false;
+
                             }
                             else
                                 System.out.println("Must attack target");
@@ -170,19 +168,23 @@ public class map {
                     }
 
                     if(!attackTurn) {
-                        if (unitSelected % 2 != 0) {
-                            showSpeed(p);
-                            temp1 = boardSprite[p.x][p.y];
-                            kek.remove(temp1);
-                            boardSprite[p.x][p.y] = null;
-                            check = true;
+                        try {
+                            if (unitSelected % 2 != 0) {
+                                showSpeed(p);
+                                temp1 = boardSprite[p.x][p.y];
+                                kek.remove(temp1);
+                                boardSprite[p.x][p.y] = null;
+                                check = true;
 
+                            } else {
+
+                                check = false;
+                            }
                         }
-                        else{
+                        catch (Exception e1){
                             System.out.println("No unit selected");
                             check = false;
                         }
-
 
                         }
 
@@ -260,8 +262,9 @@ public class map {
                     showRange(p);
 
                 }*/
-                last = new Point(hexmech.pxtoHex(e.getX(), e.getY()));
+                last = p;
             }
+
         }
 
         public int[] offsetToCube(int row, int col){
@@ -287,17 +290,13 @@ public class map {
         }
 
         public void showSpeed (Point one){
-            int distance, speed;
+            int distance;
             Point check;
-            temp1 =boardSprite[one.x][one.y];
-            int temp = kek.searchIndex(temp1);
-            temp1.setSpeed(kek.objects[temp].getSpeed());
-            speed= temp1.speed;
             for (int i = 0; i < BSIZE; i++) {
                 for (int j = 0; j < BSIZE; j++) {
                   check = new Point(i,j);
                   distance= offsetDistance(check ,one);
-                    if(distance <= speed) {
+                    if(distance <= boardSprite[one.x][one.y].getSpeed()) {
                       board[i][j]=-1;
                   }
                 }
@@ -306,16 +305,13 @@ public class map {
         }
 
         public void showRange (Point one){
-            int distance, range;
+            int distance;
             Point check;
-            temp1 =boardSprite[one.x][one.y];
-            int temp = kek.searchIndex(temp1);
-            temp1.setRange(kek.objects[temp].getRange());
             for (int i = 0; i < BSIZE; i++) {
                 for (int j = 0; j < BSIZE; j++) {
                     check = new Point(i,j);
                     distance= offsetDistance(check ,one);
-                    if(distance <= temp1.getRange()) {
+                    if(distance <= boardSprite[one.x][one.y].getRange()) {
                         board[i][j]=1;
                     }
                 }
@@ -326,15 +322,13 @@ public class map {
         public boolean checkRange(Point one){
             Point check;
             int distance;
-            temp1 =boardSprite[one.x][one.y];
-            int temp = kek.searchIndex(temp1);
-            temp1.setRange(kek.objects[temp].getRange());
             for (int i = 0; i < BSIZE; i++) {
                 for (int j = 0; j < BSIZE; j++) {
                     check = new Point(i, j);
                     distance = offsetDistance(check, one);
-                    if(distance <= temp1.range)
-                        if(boardSprite[check.x][check.y] != null)
+                    if(!((i==one.x)&&(j==one.y)))
+                        if(distance <= boardSprite[one.x][one.y].getRange())
+                          if(boardSprite[check.x][check.y] != null)
                             return true;
                 }
             }
@@ -350,22 +344,13 @@ public class map {
         }
 
         public void attack(Point p, Point t){
-            temp1 =boardSprite[p.x][p.y];
-            int tempA = kek.searchIndex(temp1);
-            temp1.setDamage(kek.objects[tempA].getDamage());
-            temp2= boardSprite[t.x][t.y];
-            int tempB = kek.searchIndex(temp2);
-            temp2.setHealth(kek.objects[tempB].getHealth());
-            temp2.setHealth(temp2.getHealth()-temp1.getDamage());
-            boardSprite[p.x][p.y]=temp1;
-            if(temp2.getHealth()<=0) {
-                kek.remove(temp2);
+            System.out.println("Damage inflicted:"+boardSprite[p.x][p.y].getDamage()+", Health before:"+boardSprite[t.x][t.y].getHealth());
+            boardSprite[t.x][t.y].setHealth(boardSprite[t.x][t.y].getHealth()-boardSprite[p.x][p.y].getDamage());
+            System.out.println("Health remaining:"+boardSprite[t.x][t.y].getHealth());
+            if(boardSprite[t.x][t.y].getHealth()<=0) {
+                kek.remove(boardSprite[t.x][t.y]);
                 boardSprite[t.x][t.y]=null;
             }
-
-
         }
-
-
     }
 }

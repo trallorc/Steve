@@ -16,9 +16,9 @@ public class Type2 extends BasicObject {
 
 	public Type2(String img, int x, int y){
 		super(img, x,y);
-        health= (int)(Math.random() * 4 + 8);
-        damage= (int)(Math.random() * 4 + 10);
-        speed= (int)(Math.random() * 3 + 5);
+        health= 10;
+        damage= 4;
+        speed= 2;
 		range=1;
 		init();
 	}

@@ -16,10 +16,10 @@ public class Type3 extends BasicObject {
 
     public Type3(String img, int x, int y){
         super(img, x,y);
-        health= (int)(Math.random() * 2 );
-        damage= (int)(Math.random() * 2 );
-        speed= (int)(Math.random() * 2 );
-        range= 3;
+        health= 2;
+        damage= 4;
+        speed= 2;
+        range= 4;
         init();
     }
 

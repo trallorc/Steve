@@ -5,7 +5,7 @@ public abstract  class BasicObject {
 	double x,y;
 	ImageIcon im;
 	int health, damage, speed, range;
-	boolean yes;
+    int team;
 	 
 	public BasicObject(String img, int x, int y){
 		 this.x=x;
