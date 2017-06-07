@@ -209,6 +209,11 @@ public class Map {
                                         attackTurn = true;
                                         showRange(p);
                                     }
+                                    else
+                                        turn = !turn;
+
+
+
 
                                 } else {
                                     System.out.println("Location unreachable");
