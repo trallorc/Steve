@@ -11,7 +11,7 @@ public class Type1 extends BasicObject {
 	int cols=3;
 	int width;
 	int height;
-    int health, damage, speed;
+    int health, damage, speed, range;
 
 
 	public Type1(String img, int x, int y){
@@ -19,6 +19,7 @@ public class Type1 extends BasicObject {
         health= (int)(Math.random() * 5 + 3);
         damage= (int)(Math.random() * 5 + 3);
         speed= 3;
+		range=1;
 		init();
 	}
 
@@ -66,6 +67,11 @@ public class Type1 extends BasicObject {
 
 	public int getSpeed() {
 		return speed;
+	}
+
+	@Override
+	public int getRange() {
+		return range;
 	}
 
 	@Override

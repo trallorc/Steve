@@ -4,8 +4,8 @@ import java.awt.*;
 public abstract  class BasicObject {
 	double x,y;
 	ImageIcon im;
-	int health, damage, speed;
-
+	int health, damage, speed, range;
+	boolean yes;
 	 
 	public BasicObject(String img, int x, int y){
 		 this.x=x;
@@ -14,6 +14,7 @@ public abstract  class BasicObject {
 		 this.health=0;
 		 this.damage=0;
 		 this.speed=0;
+		 this.range=0;
 	}
 
 
@@ -39,6 +40,14 @@ public abstract  class BasicObject {
 
 	public void setSpeed(int speed) {
 		this.speed = speed;
+	}
+
+	public int getRange() {
+		return range;
+	}
+
+	public void setRange(int range) {
+		this.range = range;
 	}
 
 	public abstract void update(int x, int y);

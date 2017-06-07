@@ -11,7 +11,7 @@ public class Type3 extends BasicObject {
     int cols=1;
     int width;
     int height;
-    int health, damage, speed;
+    int health, damage, speed, range;
 
 
     public Type3(String img, int x, int y){
@@ -19,6 +19,7 @@ public class Type3 extends BasicObject {
         health= (int)(Math.random() * 2 );
         damage= (int)(Math.random() * 2 );
         speed= (int)(Math.random() * 2 );
+        range= 3;
         init();
     }
 
@@ -69,11 +70,17 @@ public class Type3 extends BasicObject {
     }
 
     @Override
+    public int getRange() {
+        return range;
+    }
+
+    @Override
     public String toString() {
         return "Sprite{" +
                 "health=" + health +
                 ", damage=" + damage +
                 ", speed=" + speed +
+                ", range=" + range +
                 '}';
     }
 }
