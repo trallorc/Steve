@@ -31,7 +31,8 @@ public class Map {
     JFrame frame;
     int[][] board = new int[BSIZE][BSIZE];
     BasicObject[][] boardSprite = new BasicObject[BSIZE][BSIZE];
-    Units kek = new Units();
+    Units kek1 = new Units();
+    Units kek2 = new Units();
     BasicObject temp1, temp2;
     int unitSelected = 1;
     boolean check = true;
@@ -41,6 +42,8 @@ public class Map {
     int id;
     boolean turn;
     Client client;
+    boolean over=false;
+
 
     private Map() {
         initGame();
@@ -62,12 +65,12 @@ public class Map {
         }
 
 
-        for (int i = 0; i < 14; i += 2) {
+       /* for (int i = 0; i < 14; i += 2) {
             Point k = new Point(hexmech.pxtoHex2(i, 0));
             Type1 chok = new Type1("picts/bad1.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
-            kek.add(chok);
-            int temp = kek.searchIndex(chok);
-            boardSprite[i][0] = kek.objects[temp];
+            kek1.add(chok);
+            int temp = kek1.searchIndex(chok);
+            boardSprite[i][0] = kek1.objects[temp];
 
         }
 
@@ -75,28 +78,29 @@ public class Map {
         for (int i = 1; i < 14; i += 2) {
             Point k = new Point(hexmech.pxtoHex2(i, 13));
             Type2 chok = new Type2("picts/Minifish.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,2);
-            kek.add(chok);
-            int temp = kek.searchIndex(chok);
-            boardSprite[i][13] = kek.objects[temp];
-        }
+            kek2.add(chok);
+            int temp = kek2.searchIndex(chok);
+            boardSprite[i][13] = kek2.objects[temp];
+        }*/
         Point k = new Point(hexmech.pxtoHex2(8, 7));
         Type1 ele = new Type1("picts/bad1.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
-        kek.add(ele);
-        int temp = kek.searchIndex(ele);
-        boardSprite[8][7] = kek.objects[temp];
+        kek1.add(ele);
+        int temp = kek1.searchIndex(ele);
+        boardSprite[8][7] = kek1.objects[temp];
 
         Point c = new Point(hexmech.pxtoHex2(9, 5));
         Type3 oren = new Type3("picts/gachi.png", c.x + HEXSIZE / 2 + 3, c.y + HEXSIZE / 2,2);
-        kek.add(oren);
-        int temp1 = kek.searchIndex(oren);
-        boardSprite[9][5] = kek.objects[temp1];
-        client = new Client(this);
+        kek2.add(oren);
+        int temp1 = kek2.searchIndex(oren);
+        boardSprite[9][5] = kek2.objects[temp1];
+
     }
 
     private void createAndShowGUI() {
         DrawingPanel panel = new DrawingPanel();
         //JFrame.setDefaultLookAndFeelDecorated(true);
         frame = new JFrame("THE GAME");
+        client = new Client(this);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container content = frame.getContentPane();
         content.add(panel);
@@ -143,7 +147,8 @@ public class Map {
             //g.setColor(Color.RED);
             //g.drawLine(mPt.x,mPt.y, mPt.x,mPt.y);
             //currentSprite.draw(g);
-            kek.draw(g);
+            kek1.draw(g);
+            kek2.draw(g);
         }
 
         class MyMouseListener extends MouseAdapter {
@@ -182,7 +187,16 @@ public class Map {
                             try {
                                 showSpeed(p);
                                 temp1 = boardSprite[p.x][p.y];
-                                kek.remove(temp1);
+                                try {
+
+                                    kek1.remove(temp1);
+                                }
+                                catch (Exception e1){};
+                                try {
+
+                                    kek2.remove(temp1);
+                                }
+                                catch (Exception e1){};
                                 boardSprite[p.x][p.y] = null;
                                 check = true;
 
@@ -199,9 +213,23 @@ public class Map {
                             if (boardSprite[p.x][p.y] == null) {
                                 if (board[p.x][p.y] == -1) {
                                     temp1.update(k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
-                                    kek.add(temp1);
-                                    int temp = kek.searchIndex(temp1);
-                                    boardSprite[p.x][p.y] = kek.objects[temp];
+                                    try {
+
+                                        kek1.add(temp1);
+                                        int temp = kek1.searchIndex(temp1);
+                                        boardSprite[p.x][p.y] = kek1.objects[temp];
+
+                                    }
+                                    catch (Exception e1){};
+                                    try {
+
+                                        kek2.add(temp1);
+                                        int temp = kek2.searchIndex(temp1);
+                                        boardSprite[p.x][p.y] = kek2.objects[temp];
+
+                                    }
+                                    catch (Exception e1){};
+
                                     temp1 = null;
                                     check = true;
                                     clearBoard();
@@ -210,7 +238,8 @@ public class Map {
                                         showRange(p);
                                     }
                                     else
-                                        turn = !turn;
+                                        turn=!turn;
+
 
 
 
@@ -269,7 +298,10 @@ public class Map {
 
                 }*/
                 last = p;
+                //over=end();
                 client.send("turn##"+id+"##"+e.getX()+"##"+e.getY()+"##"+e.getButton());
+               /* if(over)
+                    client.send("end##");*/
 
             }
 
@@ -372,7 +404,14 @@ public class Map {
             boardSprite[t.x][t.y].setHealth(health);
             System.out.println("Health remaining:" + boardSprite[t.x][t.y].getHealth());
             if (boardSprite[t.x][t.y].getHealth() <= 0) {
-                kek.remove(boardSprite[t.x][t.y]);
+                try {
+                    kek1.remove(boardSprite[t.x][t.y]);
+                }
+                catch(Exception e1){};
+                try {
+                    kek2.remove(boardSprite[t.x][t.y]);
+                }
+                catch(Exception e1){};
                 boardSprite[t.x][t.y] = null;
             }
 
@@ -412,7 +451,18 @@ public class Map {
                         try {
                             showSpeed(p);
                             temp1 = boardSprite[p.x][p.y];
-                            kek.remove(temp1);
+                            try {
+
+                                kek1.remove(temp1);
+
+                            }
+                            catch (Exception e1){};
+                            try {
+
+                                kek2.remove(temp1);
+
+                            }
+                            catch (Exception e1){};
                             boardSprite[p.x][p.y] = null;
                             check = true;
 
@@ -429,9 +479,23 @@ public class Map {
                         if (boardSprite[p.x][p.y] == null) {
                             if (board[p.x][p.y] == -1) {
                                 temp1.update(k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
-                                kek.add(temp1);
-                                int temp = kek.searchIndex(temp1);
-                                boardSprite[p.x][p.y] = kek.objects[temp];
+                                try {
+
+                                    kek1.add(temp1);
+                                    int temp = kek1.searchIndex(temp1);
+                                    boardSprite[p.x][p.y] = kek1.objects[temp];
+
+                                }
+                                catch (Exception e1){};
+                                try {
+
+                                    kek2.add(temp1);
+                                    int temp = kek2.searchIndex(temp1);
+                                    boardSprite[p.x][p.y] = kek2.objects[temp];
+
+                                }
+                                catch (Exception e1){};
+
                                 temp1 = null;
                                 check = true;
                                 clearBoard();
@@ -439,6 +503,12 @@ public class Map {
                                     attackTurn = true;
                                     showRange(p);
                                 }
+                                else
+                                    turn=!turn;
+
+
+
+
 
                             } else {
                                 System.out.println("Location unreachable");
@@ -494,7 +564,22 @@ public class Map {
 
                 }*/
             last = p;
+            /*over=end();
+            if(over)
+                client.send("end##");*/
+
         }
     }
+   /* public boolean end(){
+        if(kek1.num==0){
+            System.out.println("Player 2 wins");
+            return true;
+        }
+        if(kek2.num==0){
+            System.out.println("Player 1 wins");
+            return true;
+        }
+        return false;
+    }*/
     }
 }
