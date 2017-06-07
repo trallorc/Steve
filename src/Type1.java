@@ -14,8 +14,8 @@ public class Type1 extends BasicObject {
     int health, damage, speed, range;
 
 
-	public Type1(String img, int x, int y){
-		super(img, x,y);
+	public Type1(String img, int x, int y, int t){
+		super(img, x,y,t);
         health= 5;
         damage= 3;
         speed= 3;
@@ -64,8 +64,37 @@ public class Type1 extends BasicObject {
 
 	}
 
+    @Override
+    public int getHealth() {
+        return health;
+    }
 
-	public int getSpeed() {
+    @Override
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    @Override
+    public int getDamage() {
+        return damage;
+    }
+
+    @Override
+    public void setDamage(int damage) {
+        this.damage = damage;
+    }
+
+    @Override
+    public void setSpeed(int speed) {
+        this.speed = speed;
+    }
+
+    @Override
+    public void setRange(int range) {
+        this.range = range;
+    }
+
+    public int getSpeed() {
 		return speed;
 	}
 

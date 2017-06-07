@@ -7,9 +7,10 @@ public abstract  class BasicObject {
 	int health, damage, speed, range;
     int team;
 	 
-	public BasicObject(String img, int x, int y){
+	public BasicObject(String img, int x, int y, int team){
 		 this.x=x;
 		 this.y=y;
+         this.team=team;
 		 im = new ImageIcon(img);
 		 this.health=0;
 		 this.damage=0;

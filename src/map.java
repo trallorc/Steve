@@ -34,11 +34,13 @@ public class map {
     int[][] board = new int[BSIZE][BSIZE];
     BasicObject[][] boardSprite = new BasicObject[BSIZE][BSIZE];
     Units kek = new Units();
-    BasicObject temp1,temp2;
-    int unitSelected=1;
-    boolean check=true;
-    boolean attackTurn=false;
+    BasicObject temp1, temp2;
+    int unitSelected = 1;
+    boolean check = true;
+    boolean attackTurn = false;
+    boolean wait=false;
     Point last;
+
     void initGame() {
 
         hexmech.setXYasVertex(false); //RECOMMENDED: leave this as FALSE.
@@ -55,7 +57,7 @@ public class map {
 
         for (int i = 0; i < 14; i += 2) {
             Point k = new Point(hexmech.pxtoHex2(i, 0));
-            Type1 chok = new Type1("picts/bad1.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
+            Type1 chok = new Type1("picts/bad1.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
             kek.add(chok);
             int temp = kek.searchIndex(chok);
             boardSprite[i][0] = kek.objects[temp];
@@ -65,19 +67,19 @@ public class map {
 
         for (int i = 1; i < 14; i += 2) {
             Point k = new Point(hexmech.pxtoHex2(i, 13));
-            Type2 chok = new Type2("picts/Minifish.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
+            Type2 chok = new Type2("picts/Minifish.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,2);
             kek.add(chok);
             int temp = kek.searchIndex(chok);
             boardSprite[i][13] = kek.objects[temp];
         }
         Point k = new Point(hexmech.pxtoHex2(8, 7));
-        Type1 ele = new Type1("picts/bad1.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
+        Type1 ele = new Type1("picts/bad1.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
         kek.add(ele);
         int temp = kek.searchIndex(ele);
         boardSprite[8][7] = kek.objects[temp];
 
         Point c = new Point(hexmech.pxtoHex2(9, 5));
-        Type3 oren = new Type3("picts/gachi.png", c.x + HEXSIZE / 2 + 3, c.y + HEXSIZE / 2);
+        Type3 oren = new Type3("picts/gachi.png", c.x + HEXSIZE / 2 + 3, c.y + HEXSIZE / 2,2);
         kek.add(oren);
         int temp1 = kek.searchIndex(oren);
         boardSprite[9][5] = kek.objects[temp1];
@@ -140,58 +142,51 @@ public class map {
             public void mouseClicked(MouseEvent e) {
 
                 Point p = new Point(hexmech.pxtoHex(e.getX(), e.getY()));
-                 //System.out.println("p: " + p.x + " " +  p.y);
+                //System.out.println("p: " + p.x + " " +  p.y);
                 Point k = new Point(hexmech.pxtoHex2(p.x, p.y));
-                 //System.out.println("k: " + k.x + " " +  k.y);
+                //System.out.println("k: " + k.x + " " +  k.y);
 
                 if (p.x < 0 || p.y < 0 || p.x >= BSIZE || p.y >= BSIZE) return;
 
-                System.out.println("First:"+p+"Last:"+last);
+                //System.out.println("First:" + p + "Last:" + last);
 
                 if (e.getButton() == 1) {
-                    System.out.println(unitSelected);
-                    if(attackTurn) {
-                        check=false;
-                        if(board[p.x][p.y]==1) {
-                            if(boardSprite[p.x][p.y] != null) {
+                    //System.out.println(unitSelected);
+                    if (attackTurn) {
+                        check = false;
+                        if (board[p.x][p.y] == 1) {
+                            if (boardSprite[p.x][p.y] != null) {
 
-                                    attack(last, p);
-                                    clearBoard();
-                                    attackTurn = false;
-
-                            }
-                            else
+                                attack(last, p);
+                                clearBoard();
+                                attackTurn = false;
+                                wait=true;
+                            } else
                                 System.out.println("Must attack target");
-                        }
-                        else
+                        } else
                             System.out.println("Target outside of range");
                     }
 
-                    if(!attackTurn) {
-                        try {
-                            if (unitSelected % 2 != 0) {
+                    if (!attackTurn && !wait) {
+                        if (unitSelected % 2 != 0) {
+                            try {
                                 showSpeed(p);
                                 temp1 = boardSprite[p.x][p.y];
                                 kek.remove(temp1);
                                 boardSprite[p.x][p.y] = null;
                                 check = true;
 
-                            } else {
-
+                            } catch (Exception e1) {
+                                System.out.println("No unit selected");
                                 check = false;
                             }
-                        }
-                        catch (Exception e1){
-                            System.out.println("No unit selected");
+                        } else {
                             check = false;
                         }
 
-                        }
-
-
 
                         if (unitSelected % 2 == 0) {
-                            if(boardSprite[p.x][p.y] == null) {
+                            if (boardSprite[p.x][p.y] == null) {
                                 if (board[p.x][p.y] == -1) {
                                     temp1.update(k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
                                     kek.add(temp1);
@@ -200,26 +195,26 @@ public class map {
                                     temp1 = null;
                                     check = true;
                                     clearBoard();
-                                    if(checkRange(p)) {
+                                    if (checkRange(p)) {
                                         attackTurn = true;
                                         showRange(p);
                                     }
 
-                                }
-                                else {
+                                } else {
                                     System.out.println("Location unreachable");
                                     check = false;
                                 }
-                            }
-                            else {
+                            } else {
                                 System.out.println("Location is occupied");
                                 check = false;
                             }
                         }
-                        if(check)
-                            unitSelected++;
-                        System.out.println(check);
-                        System.out.println(attackTurn);
+                    }
+                    if (check)
+                        unitSelected++;
+                    wait=false;
+                    //System.out.println(check);
+                    //System.out.println(attackTurn);
 
 
 
@@ -240,10 +235,6 @@ public class map {
                     }
                     System.out.println(click);
                     click++;*/
-
-
-
-
 
 
                     repaint();
@@ -267,15 +258,15 @@ public class map {
 
         }
 
-        public int[] offsetToCube(int row, int col){
-            int z,x,y;
-            x = col - (row - row % 2) /2;
+        public int[] offsetToCube(int row, int col) {
+            int z, x, y;
+            x = col - (row - row % 2) / 2;
             z = row;
-            y = - x - z;
-            return new int[] {x, y, z};
+            y = -x - z;
+            return new int[]{x, y, z};
         }
 
-        public int cubeDistance(int[] p1, int[] p2){
+        public int cubeDistance(int[] p1, int[] p2) {
             int a = Math.abs(p1[0] - p2[0]);
             int b = Math.abs(p1[1] - p2[1]);
             int c = Math.abs(p1[2] - p2[2]);
@@ -284,52 +275,53 @@ public class map {
         }
 
         public int offsetDistance(Point one, Point two) {
-            int[] ac = offsetToCube(one.x,one.y);
+            int[] ac = offsetToCube(one.x, one.y);
             int[] bc = offsetToCube(two.x, two.y);
             return (cubeDistance(ac, bc));
         }
 
-        public void showSpeed (Point one){
+        public void showSpeed(Point one) {
             int distance;
             Point check;
             for (int i = 0; i < BSIZE; i++) {
                 for (int j = 0; j < BSIZE; j++) {
-                  check = new Point(i,j);
-                  distance= offsetDistance(check ,one);
-                    if(distance <= boardSprite[one.x][one.y].getSpeed()) {
-                      board[i][j]=-1;
-                  }
-                }
-            }
-        repaint();
-        }
-
-        public void showRange (Point one){
-            int distance;
-            Point check;
-            for (int i = 0; i < BSIZE; i++) {
-                for (int j = 0; j < BSIZE; j++) {
-                    check = new Point(i,j);
-                    distance= offsetDistance(check ,one);
-                    if(distance <= boardSprite[one.x][one.y].getRange()) {
-                        board[i][j]=1;
+                    check = new Point(i, j);
+                    distance = offsetDistance(check, one);
+                    if (distance <= boardSprite[one.x][one.y].getSpeed()) {
+                        board[i][j] = -1;
                     }
                 }
             }
             repaint();
         }
 
-        public boolean checkRange(Point one){
+        public void showRange(Point one) {
+            int distance;
+            Point check;
+            for (int i = 0; i < BSIZE; i++) {
+                for (int j = 0; j < BSIZE; j++) {
+                    check = new Point(i, j);
+                    distance = offsetDistance(check, one);
+                    if (distance <= boardSprite[one.x][one.y].getRange())
+                        if(one.x != check.x || one.y != check.y)
+                            board[i][j] = 1;
+
+                }
+            }
+            repaint();
+        }
+
+        public boolean checkRange(Point one) {
             Point check;
             int distance;
             for (int i = 0; i < BSIZE; i++) {
                 for (int j = 0; j < BSIZE; j++) {
                     check = new Point(i, j);
                     distance = offsetDistance(check, one);
-                    if(!((i==one.x)&&(j==one.y)))
-                        if(distance <= boardSprite[one.x][one.y].getRange())
-                          if(boardSprite[check.x][check.y] != null)
-                            return true;
+                    if (!((i == one.x) && (j == one.y)))
+                        if (distance <= boardSprite[one.x][one.y].getRange())
+                            if (boardSprite[check.x][check.y] != null)
+                                return true;
                 }
             }
             return false;
@@ -343,7 +335,43 @@ public class map {
             }
         }
 
+        public void attack(Point p, Point t) {
+            int damage = 0, health = 0;
+
+            if (boardSprite[p.x][p.y] instanceof Type1)
+                damage = ((Type1) boardSprite[p.x][p.y]).getDamage();
+            if (boardSprite[p.x][p.y] instanceof Type2)
+                damage = ((Type2) boardSprite[p.x][p.y]).getDamage();
+            if (boardSprite[p.x][p.y] instanceof Type3)
+                damage = ((Type3) boardSprite[p.x][p.y]).getDamage();
+            if (boardSprite[t.x][t.y] instanceof Type1)
+                health = ((Type1) boardSprite[t.x][t.y]).getHealth();
+            if (boardSprite[t.x][t.y] instanceof Type2)
+                health = ((Type2) boardSprite[t.x][t.y]).getHealth();
+            if (boardSprite[t.x][t.y] instanceof Type3)
+                health = ((Type3) boardSprite[t.x][t.y]).getHealth();
+            System.out.println("Damage inflicted:" + damage + ", Health before:" + health);
+            health -= damage;
+            boardSprite[t.x][t.y].setHealth(health);
+            System.out.println("Health remaining:" + boardSprite[t.x][t.y].getHealth());
+            if (boardSprite[t.x][t.y].getHealth() <= 0) {
+                kek.remove(boardSprite[t.x][t.y]);
+                boardSprite[t.x][t.y] = null;
+            }
+        /*}
         public void attack(Point p, Point t){
+            if(boardSprite[p.x][p.y] instanceof Type1)
+                boardSprite[p.x][p.y]=(Type1)boardSprite[p.x][p.y];
+            if(boardSprite[p.x][p.y] instanceof Type2)
+                boardSprite[p.x][p.y]=(Type2)boardSprite[p.x][p.y];
+            if(boardSprite[p.x][p.y] instanceof Type3)
+                boardSprite[p.x][p.y]=(Type3)boardSprite[p.x][p.y];
+            if(boardSprite[t.x][t.y] instanceof Type1)
+                boardSprite[t.x][t.y]=(Type1)boardSprite[t.x][t.y];
+            if(boardSprite[t.x][t.y] instanceof Type2)
+                boardSprite[t.x][t.y]=(Type2)boardSprite[t.x][t.y];
+            if(boardSprite[t.x][t.y] instanceof Type3)
+                boardSprite[t.x][t.y]=(Type3)boardSprite[t.x][t.y];
             System.out.println("Damage inflicted:"+boardSprite[p.x][p.y].getDamage()+", Health before:"+boardSprite[t.x][t.y].getHealth());
             boardSprite[t.x][t.y].setHealth(boardSprite[t.x][t.y].getHealth()-boardSprite[p.x][p.y].getDamage());
             System.out.println("Health remaining:"+boardSprite[t.x][t.y].getHealth());
@@ -351,6 +379,7 @@ public class map {
                 kek.remove(boardSprite[t.x][t.y]);
                 boardSprite[t.x][t.y]=null;
             }
+        }*/
         }
     }
 }
