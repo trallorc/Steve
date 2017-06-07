@@ -116,10 +116,10 @@ http://www.tonypa.pri.ee/tbw/tut25.html
         int x = i * (s + t);
         int y = j * h + (i % 2) * h / 2;
         Polygon poly = hex(x, y);
-        g2.setColor(map.COLOURCELL);
+        g2.setColor(Map.COLOURCELL);
         //g2.fillPolygon(hexmech.hex(x,y));
         g2.fillPolygon(poly);
-        g2.setColor(map.COLOURGRID);
+        g2.setColor(Map.COLOURGRID);
         g2.drawPolygon(poly);
     }
     /***************************************************************************
@@ -140,17 +140,17 @@ http://www.tonypa.pri.ee/tbw/tut25.html
         int x = i * (s + t);
         int y = j * h + (i % 2) * h / 2;
         if (n < 0) {
-            g2.setColor(map.COLOURONE);
+            g2.setColor(Map.COLOURONE);
             g2.fillPolygon(hex(x, y));
-            g2.setColor(map.COLOURONETXT);
+            g2.setColor(Map.COLOURONETXT);
             c = (char) (-n);
             g2.drawString("" + c, x + r + BORDERS, y + r + BORDERS + 4); //FIXME: handle XYVertex
             //g2.drawString(x+","+y, x+r+BORDERS, y+r+BORDERS+4);
         }
         if (n > 0) {
-            g2.setColor(map.COLOURTWO);
+            g2.setColor(Map.COLOURTWO);
             g2.fillPolygon(hex(x, y));
-            g2.setColor(map.COLOURTWOTXT);
+            g2.setColor(Map.COLOURTWOTXT);
             c = (char) n;
             g2.drawString("" + c, x + r + BORDERS, y + r + BORDERS + 4); //FIXME handle XYVertex
             //g2.drawString(i+","+j, x+r+BORDERS, y+r+BORDERS+4);

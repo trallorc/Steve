@@ -3,16 +3,13 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
-public class map {
-    private map() {
-        initGame();
-        createAndShowGUI();
-    }
+public class Map {
+
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(new Runnable() {
             public void run() {
-                new map();
+                new Map();
             }
         });
     }
@@ -30,7 +27,8 @@ public class map {
     final static int HEXSIZE = 52;    //hex size in pixels
     final static int BORDERS = 15;
     final static int SCRSIZE = HEXSIZE * (BSIZE + 1) + BORDERS * 3; //screen size (vertical dimension).
-
+    DrawingPanel me;
+    JFrame frame;
     int[][] board = new int[BSIZE][BSIZE];
     BasicObject[][] boardSprite = new BasicObject[BSIZE][BSIZE];
     Units kek = new Units();
@@ -40,6 +38,15 @@ public class map {
     boolean attackTurn = false;
     boolean wait=false;
     Point last;
+    int id;
+    boolean turn;
+    Client client;
+
+    private Map() {
+        initGame();
+        createAndShowGUI();
+
+    }
 
     void initGame() {
 
@@ -83,13 +90,13 @@ public class map {
         kek.add(oren);
         int temp1 = kek.searchIndex(oren);
         boardSprite[9][5] = kek.objects[temp1];
-
+        client = new Client(this);
     }
 
     private void createAndShowGUI() {
         DrawingPanel panel = new DrawingPanel();
         //JFrame.setDefaultLookAndFeelDecorated(true);
-        JFrame frame = new JFrame("THE GAME");
+        frame = new JFrame("THE GAME");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         Container content = frame.getContentPane();
         content.add(panel);
@@ -109,6 +116,7 @@ public class map {
             setBackground(COLOURBACK);
             MyMouseListener ml = new MyMouseListener();
             addMouseListener(ml);
+            me=this;
         }
 
         public void paintComponent(Graphics g) {
@@ -140,7 +148,8 @@ public class map {
 
         class MyMouseListener extends MouseAdapter {
             public void mouseClicked(MouseEvent e) {
-
+                if(!turn )
+                    return;
                 Point p = new Point(hexmech.pxtoHex(e.getX(), e.getY()));
                 //System.out.println("p: " + p.x + " " +  p.y);
                 Point k = new Point(hexmech.pxtoHex2(p.x, p.y));
@@ -161,6 +170,7 @@ public class map {
                                 clearBoard();
                                 attackTurn = false;
                                 wait=true;
+                                turn = !turn;
                             } else
                                 System.out.println("Must attack target");
                         } else
@@ -254,6 +264,8 @@ public class map {
 
                 }*/
                 last = p;
+                client.send("turn##"+id+"##"+e.getX()+"##"+e.getY()+"##"+e.getButton());
+
             }
 
         }
@@ -358,28 +370,126 @@ public class map {
                 kek.remove(boardSprite[t.x][t.y]);
                 boardSprite[t.x][t.y] = null;
             }
-        /*}
-        public void attack(Point p, Point t){
-            if(boardSprite[p.x][p.y] instanceof Type1)
-                boardSprite[p.x][p.y]=(Type1)boardSprite[p.x][p.y];
-            if(boardSprite[p.x][p.y] instanceof Type2)
-                boardSprite[p.x][p.y]=(Type2)boardSprite[p.x][p.y];
-            if(boardSprite[p.x][p.y] instanceof Type3)
-                boardSprite[p.x][p.y]=(Type3)boardSprite[p.x][p.y];
-            if(boardSprite[t.x][t.y] instanceof Type1)
-                boardSprite[t.x][t.y]=(Type1)boardSprite[t.x][t.y];
-            if(boardSprite[t.x][t.y] instanceof Type2)
-                boardSprite[t.x][t.y]=(Type2)boardSprite[t.x][t.y];
-            if(boardSprite[t.x][t.y] instanceof Type3)
-                boardSprite[t.x][t.y]=(Type3)boardSprite[t.x][t.y];
-            System.out.println("Damage inflicted:"+boardSprite[p.x][p.y].getDamage()+", Health before:"+boardSprite[t.x][t.y].getHealth());
-            boardSprite[t.x][t.y].setHealth(boardSprite[t.x][t.y].getHealth()-boardSprite[p.x][p.y].getDamage());
-            System.out.println("Health remaining:"+boardSprite[t.x][t.y].getHealth());
-            if(boardSprite[t.x][t.y].getHealth()<=0) {
-                kek.remove(boardSprite[t.x][t.y]);
-                boardSprite[t.x][t.y]=null;
-            }
-        }*/
+
         }
+
+    public void update(int x, int y, int button) {
+        {
+            Point p = new Point(hexmech.pxtoHex(x, y));
+            //System.out.println("p: " + p.x + " " +  p.y);
+            Point k = new Point(hexmech.pxtoHex2(p.x, p.y));
+            //System.out.println("k: " + k.x + " " +  k.y);
+
+            if (p.x < 0 || p.y < 0 || p.x >= BSIZE || p.y >= BSIZE) return;
+
+            //System.out.println("First:" + p + "Last:" + last);
+
+            if (button == 1) {
+                //System.out.println(unitSelected);
+                if (attackTurn) {
+                    check = false;
+                    if (board[p.x][p.y] == 1) {
+                        if (boardSprite[p.x][p.y] != null) {
+
+                            attack(last, p);
+                            clearBoard();
+                            attackTurn = false;
+                            wait = true;
+                            turn = !turn;
+                        } else
+                            System.out.println("Must attack target");
+                    } else
+                        System.out.println("Target outside of range");
+                }
+
+                if (!attackTurn && !wait) {
+                    if (unitSelected % 2 != 0) {
+                        try {
+                            showSpeed(p);
+                            temp1 = boardSprite[p.x][p.y];
+                            kek.remove(temp1);
+                            boardSprite[p.x][p.y] = null;
+                            check = true;
+
+                        } catch (Exception e1) {
+                            System.out.println("No unit selected");
+                            check = false;
+                        }
+                    } else {
+                        check = false;
+                    }
+
+
+                    if (unitSelected % 2 == 0) {
+                        if (boardSprite[p.x][p.y] == null) {
+                            if (board[p.x][p.y] == -1) {
+                                temp1.update(k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
+                                kek.add(temp1);
+                                int temp = kek.searchIndex(temp1);
+                                boardSprite[p.x][p.y] = kek.objects[temp];
+                                temp1 = null;
+                                check = true;
+                                clearBoard();
+                                if (checkRange(p)) {
+                                    attackTurn = true;
+                                    showRange(p);
+                                }
+
+                            } else {
+                                System.out.println("Location unreachable");
+                                check = false;
+                            }
+                        } else {
+                            System.out.println("Location is occupied");
+                            check = false;
+                        }
+                    }
+                }
+                if (check)
+                    unitSelected++;
+                wait = false;
+                //System.out.println(check);
+                //System.out.println(attackTurn);
+
+
+
+                   /* if (click % 2 != 0) {
+                        temp1 = boardSprite[p.x][p.y];
+
+                        kek.remove(temp1);
+                        boardSprite[p.x][p.y] = null;
+
+                    }
+                    if (click % 2 == 0) {
+                        temp1.update(k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2);
+                        kek.add(temp1);
+                        int temp = kek.searchIndex(temp1);
+                        boardSprite[p.x][p.y] = kek.objects[temp];
+                        temp1 = null;
+
+                    }
+                    System.out.println(click);
+                    click++;*/
+
+
+                repaint();
+            }
+
+
+            if (button == 3) {
+                try {
+                    System.out.println(boardSprite[p.x][p.y].toString());
+                } catch (Exception e1) {
+                    System.out.println("No unit selected");
+                }
+            }
+                /*if (e.getButton() == 3) {
+                    //System.out.println(offsetDistance(a, p));
+                    showRange(p);
+
+                }*/
+            last = p;
+        }
+    }
     }
 }
