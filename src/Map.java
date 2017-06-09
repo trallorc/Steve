@@ -66,24 +66,8 @@ public class Map {
 
 
         for (int i = 0; i < 14; i += 2) {
-            Point k = new Point(hexmech.pxtoHex2(i, 2));
-            Type1 chok = new Type1("picts/bad1r.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
-            kek1.add(chok);
-            int temp = kek1.searchIndex(chok);
-            boardSprite[i][0] = kek1.objects[temp];
-
-        }
-        for (int i = 0; i < 14; i += 2) {
             Point k = new Point(hexmech.pxtoHex2(i, 0));
-            Type2 chok = new Type2("picts/Minifishr.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
-            kek1.add(chok);
-            int temp = kek1.searchIndex(chok);
-            boardSprite[i][0] = kek1.objects[temp];
-
-        }
-        for (int i = 0; i < 14; i += 2) {
-            Point k = new Point(hexmech.pxtoHex2(i, 1));
-            Type3 chok = new Type3("picts/Gachir.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
+            Type1 chok = new Type1("picts/bad1r.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
             kek1.add(chok);
             int temp = kek1.searchIndex(chok);
             boardSprite[i][0] = kek1.objects[temp];
@@ -98,22 +82,17 @@ public class Map {
             int temp = kek2.searchIndex(chok);
             boardSprite[i][13] = kek2.objects[temp];
         }
+        Point k = new Point(hexmech.pxtoHex2(8, 7));
+        Type1 ele = new Type1("picts/bad1r.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,1);
+        kek1.add(ele);
+        int temp = kek1.searchIndex(ele);
+        boardSprite[8][7] = kek1.objects[temp];
 
-        for (int i = 1; i < 14; i += 2) {
-            Point k = new Point(hexmech.pxtoHex2(i, 11));
-            Type1 chok = new Type1("picts/bad1b.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,2);
-            kek2.add(chok);
-            int temp = kek2.searchIndex(chok);
-            boardSprite[i][13] = kek2.objects[temp];
-        }
-
-        for (int i = 1; i < 14; i += 2) {
-            Point k = new Point(hexmech.pxtoHex2(i, 12));
-            Type3 chok = new Type3("picts/Gachib.png", k.x + HEXSIZE / 2 + 3, k.y + HEXSIZE / 2,2);
-            kek2.add(chok);
-            int temp = kek2.searchIndex(chok);
-            boardSprite[i][13] = kek2.objects[temp];
-        }
+        Point c = new Point(hexmech.pxtoHex2(9, 5));
+        Type3 oren = new Type3("picts/gachib.png", c.x + HEXSIZE / 2 + 3, c.y + HEXSIZE / 2,2);
+        kek2.add(oren);
+        int temp1 = kek2.searchIndex(oren);
+        boardSprite[9][5] = kek2.objects[temp1];
 
     }
 

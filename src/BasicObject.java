@@ -51,6 +51,14 @@ public abstract  class BasicObject {
 		this.range = range;
 	}
 
+	public int getTeam() {
+		return team;
+	}
+
+	public void setTeam(int team) {
+		this.team = team;
+	}
+
 	public abstract void update(int x, int y);
 	 public abstract void draw (Graphics g);
 	
